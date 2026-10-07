@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+
 import DespesaSumario from './DespesaSumario';
 import DespesaLista from './DespesaLista';
 
@@ -7,6 +10,7 @@ const CATEGORIAS_FILTRO = ['Todas', 'Alimentação', 'Transporte', 'Lazer', 'Con
 
 export default function DespesaSaida({ despesas, periodo }) {
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('Todas');
+  const navigation = useNavigation();
 
   const despesasFiltradas = categoriaSelecionada === 'Todas'
     ? despesas
@@ -36,6 +40,14 @@ export default function DespesaSaida({ despesas, periodo }) {
 
       <DespesaSumario despesas={despesasFiltradas} periodo={periodo} />
       <DespesaLista despesas={despesasFiltradas} />
+
+      {/* Botão Flutuante para Adicionar Despesa */}
+      <Pressable
+        style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}
+        onPress={() => navigation.navigate('GerenciarDespesa')}
+      >
+        <Ionicons name="add" size={28} color="#ffffff" />
+      </Pressable>
     </View>
   );
 }
@@ -76,5 +88,24 @@ const styles = StyleSheet.create({
   chipTextSelecionado: {
     color: '#ffffff',
     fontWeight: 'bold',
+  },
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    backgroundColor: '#1976d2',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+  },
+  fabPressed: {
+    opacity: 0.8,
   },
 });
